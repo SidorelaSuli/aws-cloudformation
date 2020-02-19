@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub ${AWS::StackName}
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: ec2.amazonaws.com
+            Action: sts:AssumeRole 
+      ManagedPolicyArns:
+        - !Ref IAMPolicy
+
+  IAMPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: !Sub ${AWS::StackName}-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - cloudformation:CreateStack
+              - cloudformation:ListStacks
+              - cloudformation:ListStackResources
+              - cloudformation:DescribeStackEvents
+              - cloudformation:DescribeStackResource
+              - cloudformation:DescribeStacks
+              - cloudformation:ValidateTemplate
+              - cloudformation:UpdateStack
+              - cloudformation:CreateUploadBucket
+              - cloudfront:UpdateDistribution
+              - events:DescribeRule
+              - events:PutRule
+              - events:PutTargets
+              - lambda:UpdateEventSourceMapping
+              - lambda:GetFunction
+              - lambda:CreateFunction
+              - lambda:DeleteFunction
+              - lambda:PublishVersion
+              - lambda:AddPermission
+              - lambda:ListTags
+              - logs:DescribeLogGroups
+              - logs:CreateLogGroup
+              - logs:DeleteLogGroup
+              - s3:CreateBucket
+              - s3:DeleteObject
+              - s3:GetBucketAcl
+              - s3:GetBucketCORS
+              - s3:GetLifecycleConfiguration
+              - s3:GetObject
+
+Outputs:
+  IAMRole:
+    Description: Iam Role ARN (Amazon Resource Name)
+    Value: !GetAtt IAMRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}
