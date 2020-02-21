@@ -53,6 +53,7 @@ Resources:
               - s3:GetBucketCORS
               - s3:GetLifecycleConfiguration
               - s3:GetObject
+              - ec2:*
 
 Outputs:
   IAMRole:
